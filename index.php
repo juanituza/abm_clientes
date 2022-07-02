@@ -38,10 +38,10 @@ if ($_POST) {
     $nombre = $_POST["txtNombre"];
     $telefono = $_POST["txtTelefono"];
     $correo = $_POST["txtCorreo"];
-    
+
 
     if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) {
-       
+
         $nombreAleatorio = date("Ymdhmsi");
         $archivo_tpm = $_FILES["archivo"]["tmp_name"];
         $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
@@ -55,17 +55,17 @@ if ($_POST) {
         //de la imagen anterior que está asociada al cliente que estamos editando
         if ($_FILES["archivo"]["error"] !== UPLOAD_ERR_OK) {
             $nombreImagen = $aClientes[$id]["imagen"];
-        }//Si viene una imagen y hay una imagen anterior, eliminar la anterior
-        else{
-            if(file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
-            unlink("imagenes/" . $aClientes[$id]["imagen"]);
+        } //Si viene una imagen y hay una imagen anterior, eliminar la anterior
+        else {
+            if (file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
+                unlink("imagenes/" . $aClientes[$id]["imagen"]);
             }
         }
         //estoy editando
         $aClientes[$id] = array(
             'dni' => $dni,
             'nombre' => $nombre,
-            'telefono' =>$telefono,
+            'telefono' => $telefono,
             'correo' => $correo,
             'imagen' => $nombreImagen
         );
@@ -132,9 +132,9 @@ if ($_POST) {
                         <label for="edad">Correo:</label>
                         <input type="mail" name="txtCorreo" id="txtCorreo" class="form-control shadow my-2" placeholder="ejemplo@mail.com" value="<?php echo isset($aClientes[$id]["correo"]) ? $aClientes[$id]["correo"] : ""; ?>">
                     </div>
-                    <div>
-                        <label for="archivo">Adjuntar archivo:</label>
-                        <input type="file" name="archivo" id="archivo" class="form-control shadow my-2" accept=".jpg,.jpeg,.png">
+                    <div class="col-6 form-group" >
+                        <label for="imagen">Adjuntar imagen:</label>
+                        <input type="file" class="form-control-file" name="imagen" id="imagen"> accept=".jpg,.jpeg,.png">
                         <p> Archivos admitidos: .jpg .jpeg .png</p>
                     </div>
 
