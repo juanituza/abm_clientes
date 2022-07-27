@@ -134,7 +134,7 @@ if ($_POST) {
                     </div>
                     <div class="col-6 form-group" >
                         <label for="imagen">Adjuntar imagen:</label>
-                        <input type="file" class="form-control-file" name="imagen" id="imagen"> accept=".jpg,.jpeg,.png">
+                        <input type="file" class="form-control-file" name="imagen" id="imagen" accept=".jpg,.jpeg,.png">
                         <p> Archivos admitidos: .jpg .jpeg .png</p>
                     </div>
 
