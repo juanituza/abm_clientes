@@ -38,13 +38,14 @@ if ($_POST) {
     $nombre = $_POST["txtNombre"];
     $telefono = $_POST["txtTelefono"];
     $correo = $_POST["txtCorreo"];
+    $nombreImagen = "";
 
 
-    if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) {
+    if ($_FILES["imagen"]["error"] === UPLOAD_ERR_OK) {
 
-        $nombreAleatorio = date("Ymdhmsi");
-        $archivo_tpm = $_FILES["archivo"]["tmp_name"];
-        $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
+        $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000);
+        $archivo_tpm = $_FILES["imagen"]["tmp_name"];
+        $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
         if ($extension == "jpg" || $extension == "jpeg" || $extension == "png") {
             $nombreImagen = "$nombreAleatorio.$extension";
             move_uploaded_file($archivo_tpm, "imagenes/$nombreImagen");
@@ -53,7 +54,7 @@ if ($_POST) {
     if ($id >= 0) {
         //si no se subió una imagen y estoy editando conservar en $nombreImagen el nombre
         //de la imagen anterior que está asociada al cliente que estamos editando
-        if ($_FILES["archivo"]["error"] !== UPLOAD_ERR_OK) {
+        if ($_FILES["imagen"]["error"] !== UPLOAD_ERR_OK) {
             $nombreImagen = $aClientes[$id]["imagen"];
         } //Si viene una imagen y hay una imagen anterior, eliminar la anterior
         else {
@@ -132,9 +133,9 @@ if ($_POST) {
                         <label for="edad">Correo:</label>
                         <input type="mail" name="txtCorreo" id="txtCorreo" class="form-control shadow my-2" placeholder="ejemplo@mail.com" value="<?php echo isset($aClientes[$id]["correo"]) ? $aClientes[$id]["correo"] : ""; ?>">
                     </div>
-                    <div class="col-6 form-group" >
+                    <div class="col-6 form-group">
                         <label for="imagen">Adjuntar imagen:</label>
-                        <input type="file" class="form-control-file" name="imagen" id="imagen" accept=".jpg,.jpeg,.png">
+                        <input type="file" class="form-control-file" name="imagen" id="imagen" accept=".jpg,.jpeg,.png" >
                         <p> Archivos admitidos: .jpg .jpeg .png</p>
                     </div>
 
