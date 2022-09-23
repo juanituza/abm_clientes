@@ -23,7 +23,9 @@ if (isset($_GET["id"])) {
 if (isset($_GET["do"]) && $_GET["do"] == "eliminar") {
 
     if (file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
+        if (is_file("imagenes/" . $aClientes[$id]["imagen"])) {
         unlink("imagenes/" . $aClientes[$id]["imagen"]);
+        }
     }
     
     unset($aClientes[$id]);
@@ -31,11 +33,14 @@ if (isset($_GET["do"]) && $_GET["do"] == "eliminar") {
     $strJson = json_encode($aClientes);
     //almacenar el json en un archivo.txt
     file_put_contents("archivo.txt", $strJson);
-
-
+    
+    
+    
     header("location: index.php");
 }
-
+$msg = "Se han eliminado correctamente el cliente.";
+$alert = "danger";
+$disabled = "disabled";
 
 
 if ($_POST) {
@@ -75,6 +80,8 @@ if ($_POST) {
             'correo' => $correo,
             'imagen' => $nombreImagen
         );
+        $msg = "Se ha actualizado correctamente";
+        $alert = "success";
     } else {
         //estoy insertando un nuevo cliente
         $aClientes[] = array(
@@ -84,6 +91,8 @@ if ($_POST) {
             'correo' => $correo,
             'imagen' => $nombreImagen
         );
+        $msg="Se ha guardado correctamente";
+        $alert= "success";
     }
 
 
@@ -119,6 +128,10 @@ if ($_POST) {
                 <h1>Registro de clientes</h1>
             </div>
         </div>
+        <?php if (isset($msg)) {
+            echo "<div class=\"alert alert-" . $alert . " role=\"alert\">" . $msg . "</div>";
+        }
+        ?>
         <div class="row">
             <div class=" col-sm-5">
                 <form action="" method="POST" enctype="multipart/form-data">
@@ -140,7 +153,7 @@ if ($_POST) {
                     </div>
                     <div class="col-6 form-group">
                         <label for="imagen">Adjuntar imagen:</label>
-                        <input type="file" class="form-control-file" name="imagen" id="imagen" accept=".jpg,.jpeg,.png" >
+                        <input type="file" class="form-control-file" name="imagen" id="imagen" accept=".jpg,.jpeg,.png">
                         <p> Archivos admitidos: .jpg .jpeg .png</p>
                     </div>
 
