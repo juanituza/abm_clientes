@@ -21,6 +21,11 @@ if (isset($_GET["id"])) {
 }
 //si es eliminar
 if (isset($_GET["do"]) && $_GET["do"] == "eliminar") {
+
+    if (file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
+        unlink("imagenes/" . $aClientes[$id]["imagen"]);
+    }
+    
     unset($aClientes[$id]);
     //convertir el array aClientes en json
     $strJson = json_encode($aClientes);
