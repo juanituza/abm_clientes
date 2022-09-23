@@ -21,10 +21,10 @@ if (isset($_GET["id"])) {
 }
 //si es eliminar
 if (isset($_GET["do"]) && $_GET["do"] == "eliminar") {
-
+    
     if (file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
         if (is_file("imagenes/" . $aClientes[$id]["imagen"])) {
-        unlink("imagenes/" . $aClientes[$id]["imagen"]);
+            unlink("imagenes/" . $aClientes[$id]["imagen"]);
         }
     }
     
@@ -36,11 +36,10 @@ if (isset($_GET["do"]) && $_GET["do"] == "eliminar") {
     
     
     
-    header("location: index.php");
+    $msg = "Se han eliminado correctamente el cliente.";
+    $alert = "danger";
+    $disabled = "disabled";
 }
-$msg = "Se han eliminado correctamente el cliente.";
-$alert = "danger";
-$disabled = "disabled";
 
 
 if ($_POST) {
@@ -49,10 +48,10 @@ if ($_POST) {
     $telefono = $_POST["txtTelefono"];
     $correo = $_POST["txtCorreo"];
     $nombreImagen = "";
-
-
+    
+    
     if ($_FILES["imagen"]["error"] === UPLOAD_ERR_OK) {
-
+        
         $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000);
         $archivo_tpm = $_FILES["imagen"]["tmp_name"];
         $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
@@ -64,11 +63,13 @@ if ($_POST) {
     if ($id >= 0) {
         //si no se subió una imagen y estoy editando conservar en $nombreImagen el nombre
         //de la imagen anterior que está asociada al cliente que estamos editando
-        if ($_FILES["imagen"]["error"] !== UPLOAD_ERR_OK) {
-            $nombreImagen = $aClientes[$id]["imagen"];
-        } //Si viene una imagen y hay una imagen anterior, eliminar la anterior
-        else {
+        if ($imagen == "") {
+            //cargar imagen nueva al array de Aclientes
+            $imagen = $aClientes[$id]["imagen"];
+        } else {
+            //y si existe una imagen anterior 
             if (file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
+                //la elimino
                 unlink("imagenes/" . $aClientes[$id]["imagen"]);
             }
         }
@@ -91,11 +92,11 @@ if ($_POST) {
             'correo' => $correo,
             'imagen' => $nombreImagen
         );
-        $msg="Se ha guardado correctamente";
-        $alert= "success";
+        $msg = "Se ha guardado correctamente";
+        $alert = "success";
     }
-
-
+    
+    
     //convertir el array aClientes en json
     $strJson = json_encode($aClientes);
     //almacenar el json en un archivo.txt
@@ -103,6 +104,7 @@ if ($_POST) {
 }
 
 
+/* header("location: index.php"); */
 ?>
 
 
@@ -151,9 +153,9 @@ if ($_POST) {
                         <label for="edad">Correo:</label>
                         <input type="mail" name="txtCorreo" id="txtCorreo" class="form-control shadow my-2" placeholder="ejemplo@mail.com" value="<?php echo isset($aClientes[$id]["correo"]) ? $aClientes[$id]["correo"] : ""; ?>">
                     </div>
-                    <div class="col-6 form-group">
+                    <div class="form-group">
                         <label for="imagen">Adjuntar imagen:</label>
-                        <input type="file" class="form-control-file" name="imagen" id="imagen" accept=".jpg,.jpeg,.png">
+                        <input type="file" class="form-control shadow my-2" name="imagen" id="imagen" accept=".jpg,.jpeg,.png">
                         <p> Archivos admitidos: .jpg .jpeg .png</p>
                     </div>
 
