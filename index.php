@@ -4,6 +4,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
+
+
+
 //si el archivo existe
 if (file_exists('archivo.txt')) {
     //si el archivo existe, cargo los datos en la variable aClientes
@@ -14,6 +17,8 @@ if (file_exists('archivo.txt')) {
     $aClientes = array();
 }
 
+
+
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
 } else {
@@ -21,21 +26,21 @@ if (isset($_GET["id"])) {
 }
 //si es eliminar
 if (isset($_GET["do"]) && $_GET["do"] == "eliminar") {
-    
+
     if (file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
         if (is_file("imagenes/" . $aClientes[$id]["imagen"])) {
             unlink("imagenes/" . $aClientes[$id]["imagen"]);
         }
     }
-    
+
     unset($aClientes[$id]);
     //convertir el array aClientes en json
     $strJson = json_encode($aClientes);
     //almacenar el json en un archivo.txt
     file_put_contents("archivo.txt", $strJson);
-    
-    
-    
+
+
+
     $msg = "Se han eliminado correctamente el cliente.";
     $alert = "danger";
     $disabled = "disabled";
@@ -48,10 +53,10 @@ if ($_POST) {
     $telefono = $_POST["txtTelefono"];
     $correo = $_POST["txtCorreo"];
     $nombreImagen = "";
-    
-    
+
+
     if ($_FILES["imagen"]["error"] === UPLOAD_ERR_OK) {
-        
+
         $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000);
         $archivo_tpm = $_FILES["imagen"]["tmp_name"];
         $extension = pathinfo($_FILES["imagen"]["name"], PATHINFO_EXTENSION);
@@ -63,9 +68,9 @@ if ($_POST) {
     if ($id >= 0) {
         //si no se subió una imagen y estoy editando conservar en $nombreImagen el nombre
         //de la imagen anterior que está asociada al cliente que estamos editando
-        if ($imagen == "") {
+        if ($nombreImagen == "") {
             //cargar imagen nueva al array de Aclientes
-            $imagen = $aClientes[$id]["imagen"];
+            $nombreImagen = $aClientes[$id]["imagen"];
         } else {
             //y si existe una imagen anterior 
             if (file_exists("imagenes/" . $aClientes[$id]["imagen"])) {
@@ -95,8 +100,8 @@ if ($_POST) {
         $msg = "Se ha guardado correctamente";
         $alert = "success";
     }
-    
-    
+
+
     //convertir el array aClientes en json
     $strJson = json_encode($aClientes);
     //almacenar el json en un archivo.txt
@@ -160,8 +165,9 @@ if ($_POST) {
                     </div>
 
                     <div class="py-3">
-                        <button type="submit" name="btnGuardar" class="btn btn-primary m-1">GUARDAR</button>
-                        <a href="index.php" class="btn bg-danger text-white m-1">NUEVO</a>
+                        <button type="submit" name="btnGuardar" class="btn btn-success m-1">GUARDAR</button>
+                        <a href="index.php" class="btn btn-primary text-white m-1">NUEVO</a>
+                        
                     </div>
 
                 </form>
@@ -191,6 +197,7 @@ if ($_POST) {
                                     <td><?php echo $cliente['correo']; ?></td>
                                     <td> <a href="?id=<?php echo $pos ?>"> <i class="fa-solid fa-pen-to-square"></i></a>
                                         <a href="?id=<?php echo $pos ?>&do=eliminar"><i class="fa-solid fa-trash"></i></a>
+
                                     </td>
 
 
